@@ -33,6 +33,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
   padding:13px 22px;background:linear-gradient(180deg,rgba(0,5,18,.95) 0%,transparent 100%)}
 .logo{font-family:var(--font-d);font-size:15px;font-weight:900;letter-spacing:.18em;color:var(--accent);text-shadow:0 0 24px rgba(0,212,255,.7)}
 .logo em{color:#fff;font-style:normal}
+/* New style for the designer text at the top */
+.designer-text {font-family:var(--font-d);font-size:10px;letter-spacing:.15em;color:var(--accent3);text-transform:uppercase;opacity:0.8;}
 #strow{display:flex;align-items:center;gap:14px;font-family:var(--font-d);font-size:10px;letter-spacing:.1em;color:var(--muted)}
 .sdot{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 8px var(--success);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
@@ -96,12 +98,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
   background:linear-gradient(90deg,var(--accent),var(--accent2));outline:none;cursor:pointer;flex-shrink:0}
 #spsl::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;
   border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);cursor:pointer}
-#dlbtn{position:absolute;top:16px;right:16px;display:none;align-items:center;gap:7px;
-  padding:7px 14px;background:var(--hud-bg);border:1px solid rgba(160,255,128,.38);
-  border-radius:20px;cursor:pointer;pointer-events:all;
-  font-family:var(--font-d);font-size:9px;letter-spacing:.1em;
-  color:var(--accent3);transition:all .2s;backdrop-filter:blur(8px)}
-#dlbtn:hover{border-color:var(--accent3);box-shadow:0 0 12px rgba(160,255,128,.3)}
 #tip{position:fixed;background:var(--hud-bg);border:1px solid var(--accent);
   border-radius:6px;padding:5px 11px;font-family:var(--font-d);font-size:10px;
   color:var(--accent);letter-spacing:.08em;pointer-events:none;display:none;z-index:20;
@@ -140,9 +136,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
   <div class="corner c-bl"></div><div class="corner c-br"></div>
   <div id="top">
     <div class="logo">☀ <em>SOLARIS</em> EXPLORER</div>
+    <!-- Added designer text here in the center of the top bar -->
+    <div class="designer-text">Design by: Bikash Bhusal</div>
     <div id="strow"><div class="sdot"></div><span>SIMULATION ACTIVE</span><span id="tdisp">T+00:00:00</span></div>
   </div>
-  <button id="dlbtn" title="Download this file">⬇ DOWNLOAD</button>
+  
   <div id="lpanel"><div class="ptitle">Navigation</div></div>
   <div id="ipanel">
     <div class="aibadge"><div class="abdot"></div>AI ANALYSIS</div>
@@ -184,8 +182,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
 
 // ═══════════════════════════════════════════════════
 // PLANET DATA
-// retrograde: Venus & Uranus spin in reverse (west→east)
-// surfaceArea = 4π r² using real km radii
 // ═══════════════════════════════════════════════════
 const PD = [
   {
@@ -385,7 +381,8 @@ pObjs.forEach(o=>{
 // ═══════════════════════════════════════════════════
 // CAMERA CONTROLS (drag + scroll + pinch)
 // ═══════════════════════════════════════════════════
-const INIT_SPH = {th:.32,ph:.78,r:130};
+// Changed INIT_SPH 'r' value from 130 to 280 to reduce initial zoom level
+const INIT_SPH = {th:.32,ph:.78,r:120};
 let sph={...INIT_SPH}, tsph={...INIT_SPH};
 let focusTgt=new THREE.Vector3(), camTgt=new THREE.Vector3();
 let selPlanet=null;
@@ -547,15 +544,6 @@ function fullReset(){
 }
 document.getElementById('brs').addEventListener('click',fullReset);
 
-// ── DOWNLOAD ──
-document.getElementById('dlbtn').addEventListener('click',()=>{
-  const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='solaris-solar-system-explorer.html';
-  a.click(); URL.revokeObjectURL(a.href);
-});
-
 // ═══════════════════════════════════════════════════
 // ANIMATION
 // ═══════════════════════════════════════════════════
@@ -648,7 +636,6 @@ window.addEventListener('resize',()=>{
 // BOOT
 setTimeout(()=>{
   document.getElementById('load').classList.add('gone');
-  document.getElementById('dlbtn').style.display='flex';
   animate();
 },2200);
 </script>
